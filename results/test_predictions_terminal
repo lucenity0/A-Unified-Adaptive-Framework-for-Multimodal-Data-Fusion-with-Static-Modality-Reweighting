@@ -1,0 +1,23 @@
+(venv) nafeess@Nafeess-MacBook-Pro src % python3 predict.py
+Loading weights: 100%|███████████████████████████████████| 398/398 [00:00<00:00, 36308.00it/s]
+CLIPModel LOAD REPORT from: openai/clip-vit-base-patch32
+Key                                  | Status     |  | 
+-------------------------------------+------------+--+-
+vision_model.embeddings.position_ids | UNEXPECTED |  | 
+text_model.embeddings.position_ids   | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED    :can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Loaded model from epoch 7 (Val AUROC: 0.7121)
+The image processor of type `CLIPImageProcessor` is now loaded as a fast processor by default, even if the model checkpoint was saved with a slow processor. This is a breaking change and may produce slightly different outputs. To continue using the slow processor, instantiate this class with `use_fast=False`. 
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loaded 1000 samples from ../Data/test/train-00000-of-00001-19a6f88cedb64664.parquet
+Columns: ['image', 'id', 'img', 'text']
+
+Test Inference Complete — 1000 samples
+  Predicted Hateful     : 346 (34.6%)
+  Predicted Not Hateful : 654 (65.4%)
+  Image-dominant memes  : 1000 (100.0%)
+  Text-dominant  memes  : 0 (0.0%)
+
+Saved → ../results/test_predictions.csv
