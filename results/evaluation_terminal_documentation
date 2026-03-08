@@ -1,0 +1,121 @@
+(venv) nafeess@Nafeess-MacBook-Pro src % python3 run_ablation.py
+Using device: mps
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+The image processor of type `CLIPImageProcessor` is now loaded as a fast processor by default, even if the model checkpoint was saved with a slow processor. This is a breaking change and may produce slightly different outputs. To continue using the slow processor, instantiate this class with `use_fast=False`. 
+Loaded 8500 samples from ../Data/train-00000-of-00001-6587b3a58d350036.parquet
+Columns: ['image', 'id', 'img', 'label', 'text']
+Loaded 500 samples from ../Data/validation-00000-of-00001-1508d9e5032c2c1f.parquet
+Columns: ['image', 'id', 'img', 'label', 'text']
+Loading weights: 100%|███████████████████████████████████| 398/398 [00:00<00:00, 31819.85it/s]
+CLIPModel LOAD REPORT from: openai/clip-vit-base-patch32
+Key                                  | Status     |  | 
+-------------------------------------+------------+--+-
+text_model.embeddings.position_ids   | UNEXPECTED |  | 
+vision_model.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED    :can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Loading weights: 100%|███████████████████████████████████| 398/398 [00:00<00:00, 33217.25it/s]
+CLIPModel LOAD REPORT from: openai/clip-vit-base-patch32
+Key                                  | Status     |  | 
+-------------------------------------+------------+--+-
+text_model.embeddings.position_ids   | UNEXPECTED |  | 
+vision_model.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED    :can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Loading weights: 100%|███████████████████████████████████| 398/398 [00:00<00:00, 37954.91it/s]
+CLIPModel LOAD REPORT from: openai/clip-vit-base-patch32
+Key                                  | Status     |  | 
+-------------------------------------+------------+--+-
+text_model.embeddings.position_ids   | UNEXPECTED |  | 
+vision_model.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED    :can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Loading weights: 100%|███████████████████████████████████| 398/398 [00:00<00:00, 32599.07it/s]
+CLIPModel LOAD REPORT from: openai/clip-vit-base-patch32
+Key                                  | Status     |  | 
+-------------------------------------+------------+--+-
+text_model.embeddings.position_ids   | UNEXPECTED |  | 
+vision_model.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED    :can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+Loading weights: 100%|███████████████████████████████████| 398/398 [00:00<00:00, 39979.24it/s]
+CLIPModel LOAD REPORT from: openai/clip-vit-base-patch32
+Key                                  | Status     |  | 
+-------------------------------------+------------+--+-
+text_model.embeddings.position_ids   | UNEXPECTED |  | 
+vision_model.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED    :can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+
+=======================================================
+  Training: 1. Text Only
+=======================================================
+  Epoch 1/5 → AUROC: 0.6165 | Acc: 0.5520 | F1: 0.5050
+  Epoch 2/5 → AUROC: 0.6284 | Acc: 0.5860 | F1: 0.5743
+  Epoch 3/5 → AUROC: 0.6304 | Acc: 0.5760 | F1: 0.5583
+  Epoch 4/5 → AUROC: 0.6308 | Acc: 0.5740 | F1: 0.5566
+  Epoch 5/5 → AUROC: 0.6314 | Acc: 0.5740 | F1: 0.5573
+
+=======================================================
+  Training: 2. Image Only
+=======================================================
+  Epoch 1/5 → AUROC: 0.6287 | Acc: 0.5800 | F1: 0.5610
+  Epoch 2/5 → AUROC: 0.6322 | Acc: 0.5800 | F1: 0.5761
+  Epoch 3/5 → AUROC: 0.6326 | Acc: 0.5780 | F1: 0.5720
+  Epoch 4/5 → AUROC: 0.6319 | Acc: 0.5800 | F1: 0.5711
+  Epoch 5/5 → AUROC: 0.6323 | Acc: 0.5840 | F1: 0.5798
+
+=======================================================
+  Training: 3. Concat Fusion (no attention, no reweighting)
+=======================================================
+  Epoch 1/5 → AUROC: 0.6734 | Acc: 0.6140 | F1: 0.6111
+  Epoch 2/5 → AUROC: 0.6799 | Acc: 0.6080 | F1: 0.6015
+  Epoch 3/5 → AUROC: 0.6848 | Acc: 0.6140 | F1: 0.6031
+  Epoch 4/5 → AUROC: 0.6873 | Acc: 0.5980 | F1: 0.5842
+  Epoch 5/5 → AUROC: 0.6890 | Acc: 0.6080 | F1: 0.5966
+
+=======================================================
+  Training: 4. Cross-Attn (no reweighting)
+=======================================================
+  Epoch 1/5 → AUROC: 0.6483 | Acc: 0.5940 | F1: 0.5819
+  Epoch 2/5 → AUROC: 0.6864 | Acc: 0.5820 | F1: 0.5560
+  Epoch 3/5 → AUROC: 0.6885 | Acc: 0.6160 | F1: 0.6025
+  Epoch 4/5 → AUROC: 0.7025 | Acc: 0.6320 | F1: 0.6223
+  Epoch 5/5 → AUROC: 0.7054 | Acc: 0.6060 | F1: 0.5943
+
+=======================================================
+  Training: 5. Cross-Attn + Static Reweighting (Phase 1)
+=======================================================
+  Epoch 1/5 → AUROC: 0.6713 | Acc: 0.6380 | F1: 0.6345
+  Epoch 2/5 → AUROC: 0.6732 | Acc: 0.6120 | F1: 0.6023
+  Epoch 3/5 → AUROC: 0.6917 | Acc: 0.6360 | F1: 0.6323
+  Epoch 4/5 → AUROC: 0.7091 | Acc: 0.6260 | F1: 0.6187
+  Epoch 5/5 → AUROC: 0.7131 | Acc: 0.6260 | F1: 0.6143
+
+
+========================================================================
+          ABLATION STUDY RESULTS — Phase 1: Static Reweighting          
+========================================================================
+Model                                             AUROC     Acc      F1   ΔAUROC
+------------------------------------------------------------------------
+1. Text Only                                     0.6314  0.5740  0.5573  +0.0000
+2. Image Only                                    0.6326  0.5780  0.5720  +0.0012
+3. Concat Fusion (no attention, no reweighting)  0.6890  0.6080  0.5966  +0.0576
+4. Cross-Attn (no reweighting)                   0.7054  0.6060  0.5943  +0.0740
+5. Cross-Attn + Static Reweighting (Phase 1)     0.7131  0.6260  0.6143  +0.0817
+========================================================================
+
+Key finding (Phase 1):
+  Cross-Attn only AUROC              : 0.7054
+  Cross-Attn + Static Reweighting    : 0.7131
+  Gain from static reweighting alone : +0.0076
+
+  → Phase 2 will replace static alpha with per-sample dynamic gating
+     to push AUROC further.
+
+Saved → ../results/ablation_results_phase1.txt
