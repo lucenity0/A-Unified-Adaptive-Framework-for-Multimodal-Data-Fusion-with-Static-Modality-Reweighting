@@ -1,0 +1,174 @@
+(venv) nafeess@Nafeess-MacBook-Pro src % python3 demo.py
+
+=======================================================
+  Hateful Meme Classifier - Interactive Demo
+  Phase 1: Cross-Attn + Static Reweighting
+=======================================================
+  Device : mps
+  Loading model...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights: 100%|███████████████████████████████████| 398/398 [00:00<00:00, 38494.05it/s]
+CLIPModel LOAD REPORT from: openai/clip-vit-base-patch32
+Key                                  | Status     |  | 
+-------------------------------------+------------+--+-
+text_model.embeddings.position_ids   | UNEXPECTED |  | 
+vision_model.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED    :can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+The image processor of type `CLIPImageProcessor` is now loaded as a fast processor by default, even if the model checkpoint was saved with a slow processor. This is a breaking change and may produce slightly different outputs. To continue using the slow processor, instantiate this class with `use_fast=False`. 
+  Loaded checkpoint from epoch 7 (Val AUROC: 0.7121)
+
+  Instructions:
+  - Enter meme text when prompted
+  - Optionally enter an image file path
+  - Press ENTER to skip image (white blank used)
+  - Type 'quit' or 'exit' to stop
+=======================================================
+
+  Enter meme text: I'm not racist, my shadow is black
+  Image path (or ENTER to skip): 
+
+=======================================================
+  PREDICTION RESULT
+=======================================================
+  Text         : I'm not racist, my shadow is black
+  Image        : None (blank used)
+-------------------------------------------------------
+  Verdict      : [X] HATEFUL
+  Probability  : 0.9262  (92.6% hateful)
+  Confidence   : 92.6%
+  Alpha        : 0.5012  (image dominant)
+  Hate score   : [#####################################---] 0.93
+=======================================================
+
+  Enter meme text: I have mustaches, does that make me a mexican?
+  Image path (or ENTER to skip): 
+
+=======================================================
+  PREDICTION RESULT
+=======================================================
+  Text         : I have mustaches, does that make me a mexican?
+  Image        : None (blank used)
+-------------------------------------------------------
+  Verdict      : [OK] NOT HATEFUL
+  Probability  : 0.3518  (35.2% hateful)
+  Confidence   : 64.8%
+  Alpha        : 0.5012  (image dominant)
+  Hate score   : [##############--------------------------] 0.35
+=======================================================
+
+  Enter meme text: I don't use toy plane around my muslim friends
+  Image path (or ENTER to skip): 
+
+=======================================================
+  PREDICTION RESULT
+=======================================================
+  Text         : I don't use toy plane around my muslim friends
+  Image        : None (blank used)
+-------------------------------------------------------
+  Verdict      : [X] HATEFUL
+  Probability  : 0.9669  (96.7% hateful)
+  Confidence   : 96.7%
+  Alpha        : 0.5012  (image dominant)
+  Hate score   : [######################################--] 0.97
+=======================================================
+
+  Enter meme text: i love my tea non black, and im not talking about tea
+  Image path (or ENTER to skip): 
+
+=======================================================
+  PREDICTION RESULT
+=======================================================
+  Text         : i love my tea non black, and im not talking about tea
+  Image        : None (blank used)
+-------------------------------------------------------
+  Verdict      : [OK] NOT HATEFUL
+  Probability  : 0.0523  (5.2% hateful)
+  Confidence   : 94.8%
+  Alpha        : 0.5012  (image dominant)
+  Hate score   : [##--------------------------------------] 0.05
+=======================================================
+
+  Enter meme text: you suck
+  Image path (or ENTER to skip): 
+
+=======================================================
+  PREDICTION RESULT
+=======================================================
+  Text         : you suck
+  Image        : None (blank used)
+-------------------------------------------------------
+  Verdict      : [OK] NOT HATEFUL
+  Probability  : 0.0549  (5.5% hateful)
+  Confidence   : 94.5%
+  Alpha        : 0.5012  (image dominant)
+  Hate score   : [##--------------------------------------] 0.05
+=======================================================
+
+  Enter meme text: fuck you
+  Image path (or ENTER to skip): 
+
+=======================================================
+  PREDICTION RESULT
+=======================================================
+  Text         : fuck you
+  Image        : None (blank used)
+-------------------------------------------------------
+  Verdict      : [OK] NOT HATEFUL
+  Probability  : 0.0349  (3.5% hateful)
+  Confidence   : 96.5%
+  Alpha        : 0.5012  (image dominant)
+  Hate score   : [#---------------------------------------] 0.03
+=======================================================
+
+  Enter meme text: i told an innocent man fuck you and ran away laughing
+  Image path (or ENTER to skip): 
+
+=======================================================
+  PREDICTION RESULT
+=======================================================
+  Text         : i told an innocent man fuck you and ran away laughing
+  Image        : None (blank used)
+-------------------------------------------------------
+  Verdict      : [OK] NOT HATEFUL
+  Probability  : 0.0277  (2.8% hateful)
+  Confidence   : 97.2%
+  Alpha        : 0.5012  (image dominant)
+  Hate score   : [#---------------------------------------] 0.03
+=======================================================
+
+  Enter meme text: that group of people are always away from me 
+  Image path (or ENTER to skip): 
+
+=======================================================
+  PREDICTION RESULT
+=======================================================
+  Text         : that group of people are always away from me
+  Image        : None (blank used)
+-------------------------------------------------------
+  Verdict      : [OK] NOT HATEFUL
+  Probability  : 0.0134  (1.3% hateful)
+  Confidence   : 98.7%
+  Alpha        : 0.5012  (image dominant)
+  Hate score   : [----------------------------------------] 0.01
+=======================================================
+
+  Enter meme text: i never take my money when my jewish man is around
+  Image path (or ENTER to skip): 
+
+=======================================================
+  PREDICTION RESULT
+=======================================================
+  Text         : i never take my money when my jewish man is around
+  Image        : None (blank used)
+-------------------------------------------------------
+  Verdict      : [X] HATEFUL
+  Probability  : 0.9764  (97.6% hateful)
+  Confidence   : 97.6%
+  Alpha        : 0.5012  (image dominant)
+  Hate score   : [#######################################-] 0.98
+=======================================================
+
+  Enter meme text: exit
+  Exiting demo.
