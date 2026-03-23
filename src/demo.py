@@ -66,7 +66,12 @@ def predict(text, image, model, processor, device):
     prob  = torch.sigmoid(logit).item()
     label = 1 if prob >= 0.5 else 0
     conf  = prob if prob >= 0.5 else 1 - prob
-    alpha_val = alpha.item() if hasattr(alpha, 'item') else float(alpha)
+    if hasattr(alpha, 'dim') and alpha.dim() > 0:
+        alpha_val = alpha[0].item()
+    elif hasattr(alpha, 'item'):
+        alpha_val = alpha.item()
+    else:
+        alpha_val = float(alpha)
 
     return prob, label, alpha_val, conf
 

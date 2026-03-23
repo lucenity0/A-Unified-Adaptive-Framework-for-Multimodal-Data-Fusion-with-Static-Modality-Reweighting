@@ -33,8 +33,13 @@ def plot_alpha_distribution(model, val_loader, device, save_path="alpha_distribu
 
             _, alpha = model(input_ids, attention_mask, pixel_values)
 
-            # Mean alpha across 512 dimensions → one scalar per sample
-            alpha_mean = alpha.mean(dim=-1).cpu().numpy()
+            # Handle both static (0-dim scalar) and dynamic (B,) per-sample alpha
+            if alpha.dim() == 0:
+                # Static alpha — replicate the single scalar for every sample in the batch
+                alpha_mean = np.full(labels.shape[0], alpha.item())
+            else:
+                # Dynamic alpha — already one value per sample
+                alpha_mean = alpha.cpu().numpy()
             all_alphas.extend(alpha_mean)
             all_labels.extend(labels.numpy())
 
@@ -86,13 +91,13 @@ if __name__ == "__main__":
     )
 
     _, val_loader = get_dataloaders(
-        "train-00000-of-0000....parquet",
-        "validation-00000-of-000....parquet",
+        "../Data/train-00000-of-00001-6587b3a58d350036.parquet",
+        "../Data/validation-00000-of-00001-1508d9e5032c2c1f.parquet",
         batch_size=32
     )
 
     model = AdaptiveFusionModel(freeze_clip=True).to(device)
-    checkpoint = torch.load("checkpoints/best_model.pt", map_location=device)
+    checkpoint = torch.load("../checkpoints/best_model.pt", map_location=device)
     model.load_state_dict(checkpoint['model_state'])
     print(f"Loaded model from epoch {checkpoint['epoch']} "
           f"(Val AUROC: {checkpoint['val_auroc']:.4f})")

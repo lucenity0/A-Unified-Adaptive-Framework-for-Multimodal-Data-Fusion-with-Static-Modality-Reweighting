@@ -108,9 +108,12 @@ def main():
             probs = torch.sigmoid(logits).cpu().numpy()
             preds = (probs >= 0.5).astype(int)
 
-            # Static alpha is a scalar — same value for all samples in batch
-            alpha_val = alpha.item() if hasattr(alpha, 'item') else float(alpha)
-            alpha_means = [alpha_val] * len(probs)
+            # Handle both static (0-dim scalar) and dynamic (B,) per-sample alpha
+            if hasattr(alpha, 'dim') and alpha.dim() > 0:
+                alpha_means = alpha.cpu().numpy().tolist()
+            else:
+                alpha_val   = alpha.item() if hasattr(alpha, 'item') else float(alpha)
+                alpha_means = [alpha_val] * len(probs)
 
             all_probs.extend(probs)
             all_preds.extend(preds)

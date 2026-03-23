@@ -2,15 +2,15 @@
 model.py
 ========
 Unified Adaptive Framework for Multimodal Data Fusion
-with Static Modality Reweighting (Phase 1)
+with Static Modality Reweighting (Phase 1) and Dynamic Gating (Phase 2)
 
 Architecture:
     CLIP Image Encoder ──┐
-                         ├──► Cross-Modal Attention ──► Static Gating ──► Classifier ──► 0/1
+                         ├──► Cross-Modal Attention ──► Gating ──► Classifier ──► 0/1
     CLIP Text Encoder  ──┘
 
 Phase 1: Static Gating  — one learned scalar alpha for all samples
-Phase 2: Dynamic Gating — per-sample alpha (add after Phase 1 is working)
+Phase 2: Dynamic Gating — per-sample alpha computed from text+image features
 """
 
 import torch
@@ -138,7 +138,53 @@ class StaticGatingNetwork(nn.Module):
 
 
 # ─────────────────────────────────────────────────────────────────
-# BLOCK 3: Full Model
+# BLOCK 3: Dynamic Gating Network (Phase 2)
+# ─────────────────────────────────────────────────────────────────
+
+class DynamicGatingNetwork(nn.Module):
+    """
+    Phase 2 — Dynamic Per-Sample Reweighting.
+
+    Computes a per-sample scalar alpha from the concatenation of
+    text and image features after cross-modal attention.
+    Each sample gets its own image/text blend ratio.
+
+    - alpha close to 1.0 → trust image more for THIS sample
+    - alpha close to 0.0 → trust text more for THIS sample
+
+    This replaces the single global alpha from StaticGatingNetwork
+    and allows the model to adapt the fusion weight to each input.
+    """
+    def __init__(self, embed_dim=512):
+        super().__init__()
+        # Maps concat(text, image) (embed_dim*2) -> per-sample scalar in (0, 1)
+        self.gate = nn.Sequential(
+            nn.Linear(embed_dim * 2, 128),
+            nn.ReLU(),
+            nn.Linear(128, 1),
+            nn.Sigmoid()
+        )
+
+    def forward(self, text_feat, img_feat):
+        """
+        Args:
+            text_feat : (B, 512)
+            img_feat  : (B, 512)
+        Returns:
+            fused : (B, 512)
+            alpha : (B,)  — per-sample image weight, each value in (0, 1)
+        """
+        gate_input = torch.cat([text_feat, img_feat], dim=-1)   # (B, 1024)
+        alpha      = self.gate(gate_input).squeeze(1)            # (B,)
+
+        # Per-sample weighted fusion
+        fused = alpha.unsqueeze(1) * img_feat + (1 - alpha.unsqueeze(1)) * text_feat  # (B, 512)
+
+        return fused, alpha
+
+
+# ─────────────────────────────────────────────────────────────────
+# BLOCK 4: Full Model
 # ─────────────────────────────────────────────────────────────────
 
 class AdaptiveFusionModel(nn.Module):

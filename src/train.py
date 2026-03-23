@@ -97,8 +97,11 @@ def evaluate(model, loader, criterion, device):
             all_preds.extend(probs)
             all_labels.extend(labels.cpu().numpy())
 
-            # Static alpha is a scalar — just grab the value
-            final_alpha = alpha.item() if hasattr(alpha, 'item') else float(alpha)
+            # Handle both static (0-dim scalar) and dynamic (B,) per-sample alpha
+            if hasattr(alpha, 'dim') and alpha.dim() > 0:
+                final_alpha = alpha.mean().item()
+            else:
+                final_alpha = alpha.item() if hasattr(alpha, 'item') else float(alpha)
 
     all_preds  = np.array(all_preds)
     all_labels = np.array(all_labels)
